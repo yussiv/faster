@@ -1,0 +1,15 @@
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - 5173:5173
+    volumes:
+      - ./frontend/src:/app/src
+
+  backend:
+    build: ./backend
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/test:/app/test
