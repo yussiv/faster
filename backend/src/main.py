@@ -1,11 +1,11 @@
 """Server setup"""
 
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
+
+from .api import hello
 
 app = FastAPI()
+router = APIRouter(prefix="/api")
 
-
-@app.get("/")
-async def root():
-    """Hello world"""
-    return {"message": "Hello World"}
+router.include_router(hello.router)
+app.include_router(router)
