@@ -1,7 +1,7 @@
 """Users router"""
 
 from typing import Annotated
-from fastapi import Path
+from fastapi import Path, HTTPException
 from fastapi.routing import APIRouter
 
 from ..services.user_service import UserServiceDependency
@@ -24,6 +24,8 @@ async def get_user(
 ):
     """Get user"""
     user = user_service.get_user(user_id)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
     return user
 
 

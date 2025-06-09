@@ -55,6 +55,12 @@ def test_get_user():
     }
 
 
+def test_get_non_existent_user():
+    response = client.get("/api/users/666")
+
+    assert response.status_code == 404
+
+
 def test_update_user():
     test_user = _create_user(
         {
@@ -88,5 +94,6 @@ def test_delete_user():
 
     assert response.status_code == 204
 
-    no_such_user = client.get(f"/api/users/{new_user.id}").json()
-    assert no_such_user is None
+    not_found_response = client.get(f"/api/users/{new_user.id}")
+
+    assert not_found_response.status_code == 404
