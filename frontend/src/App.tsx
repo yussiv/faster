@@ -1,33 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import type React from 'react'
+import AddUser from './components/AddUser'
+import { useDeleteUser } from './hooks/useDeleteUser'
+import { useGetUsers } from './hooks/useGetUsers'
+import { useQueryClient } from '@tanstack/react-query'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { isPending, error, data: users, isFetching } = useGetUsers()
+  const { mutate: deleteUser, isError } = useDeleteUser()
+  const queryClient = useQueryClient()
+
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    deleteUser(e.currentTarget.value, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['userList'] })
+      },
+    })
+  }
+
+  if (isPending) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    console.log(error)
+    return <div>Failed to load user list</div>
+  }
 
   return (
     <>
+      <h1>Users</h1>
+      {isError && <div className="error">Delete failed</div>}
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <ul>
+          {users.users.map((user) => (
+            <li>
+              <span>{user.username}</span>
+              <button className="delete" onClick={handleDelete} value={user.id}>
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
-      <h1>Vite + React + FastAPI</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div>{isFetching ? 'Updating...' : ''}</div>
+      <AddUser />
     </>
   )
 }
