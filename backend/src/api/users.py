@@ -5,7 +5,7 @@ from fastapi import Path
 from fastapi.routing import APIRouter
 
 from ..services.user_service import UserServiceDependency
-from ..models import User
+from ..models import User, UserAPIUpdate
 
 router = APIRouter(prefix="/users")
 
@@ -32,3 +32,24 @@ async def create_user(user: User, user_service: UserServiceDependency):
     """Create user"""
     user = user_service.create_user(username=user.username, password=user.password)
     return user
+
+
+@router.put("/{user_id}")
+async def update_user(
+    data: UserAPIUpdate,
+    user_id: Annotated[str, Path(title="Id of user to update")],
+    user_service: UserServiceDependency,
+):
+    """Update user. Username, password or id can not be changed through this API."""
+    user = user_service.update_user_email(user_id=user_id, email=data.email)
+    return user
+
+
+@router.delete("/{user_id}", status_code=204)
+async def delete_user(
+    user_id: Annotated[str, Path(title="Id of user to delete")],
+    user_service: UserServiceDependency,
+):
+    """Delete user"""
+    user_service.delete_user(user_id)
+    return

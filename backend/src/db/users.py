@@ -43,5 +43,17 @@ class Users:
         }
         return User(**_data.get(user_id))
 
+    def update(self, user_id: str, email: str) -> User | None:
+        """Update given fields for user with given id"""
+        if user_id in _data:
+            _data[user_id]["email"] = email
+            return User(**_data[user_id])
+        return None
+
+    def delete(self, user_id: str):
+        """Delete user from database"""
+        if user_id in _data:
+            del _data[user_id]
+
 
 UsersDependency = Annotated[Users, Depends()]
