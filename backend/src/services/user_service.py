@@ -19,9 +19,11 @@ class UserService:
         """Get all users"""
         return self.db.get_all()
 
-    def create_user(self, username: str, password: str) -> User:
+    def create_user(self, user: User) -> User:
         """Create new user"""
-        return self.db.create(username, password)
+        return self.db.create(
+            username=user.username, password=user.password, email=user.email
+        )
 
     def update_user_email(self, user_id: str, email: str) -> User | None:
         """Update user fields, apart from id, username and password"""

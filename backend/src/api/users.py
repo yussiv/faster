@@ -32,7 +32,7 @@ async def get_user(
 @router.post("/", status_code=201)
 async def create_user(user: User, user_service: UserServiceDependency):
     """Create user"""
-    user = user_service.create_user(username=user.username, password=user.password)
+    user = user_service.create_user(user)
     return user
 
 
