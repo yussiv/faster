@@ -13,9 +13,9 @@ class UserService:
     def __init__(self, db: UsersDependency):
         self.db = db
 
-    def get_user(self, username: str) -> User:
+    def get_user(self, user_id: str) -> User:
         """get single user"""
-        return self.db.get(username)
+        return self.db.get(user_id)
 
     def get_users(self) -> list[User]:
         """get all users"""

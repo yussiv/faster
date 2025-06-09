@@ -5,6 +5,7 @@ from fastapi import Path
 from fastapi.routing import APIRouter
 
 from ..services.user_service import UserServiceDependency
+from ..models import User
 
 router = APIRouter(prefix="/users")
 
@@ -16,20 +17,18 @@ async def get_users(user_service: UserServiceDependency):
     return {"users": users}
 
 
-@router.get("/{username}")
+@router.get("/{user_id}")
 async def get_user(
     user_service: UserServiceDependency,
-    username: Annotated[str, Path(title="Username of user to find")],
+    user_id: Annotated[str, Path(title="Id of user to find")],
 ):
     """Get user"""
-    user = user_service.get_user(username)
+    user = user_service.get_user(user_id)
     return user
 
 
-@router.post("/")
-async def create_user(
-    username: str, password: str, user_service: UserServiceDependency
-):
+@router.post("/", status_code=201)
+async def create_user(user: User, user_service: UserServiceDependency):
     """Create user"""
-    user = user_service.create_user(username, password)
+    user = user_service.create_user(username=user.username, password=user.password)
     return user

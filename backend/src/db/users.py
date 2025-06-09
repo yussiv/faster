@@ -5,29 +5,43 @@ from fastapi import Depends
 
 from ..models import User
 
-_data = {"john": {"password": "password"}, "ada": {"password": "p4ssw0rd"}}
+_data = {
+    "1": {
+        "id": "1",
+        "username": "john",
+        "password": "password",
+        "email": "john@smith.dev",
+    },
+    "2": {
+        "id": "2",
+        "username": "ada",
+        "password": "p4ssw0rd",
+        "email": "ada@lovelace.dev",
+    },
+}
 
 
 class Users:
-    """User data operations"""
-
     def get_all(self) -> list[User]:
         """Get list of User models"""
-        return [
-            User(**item, username=username) for username, item in list(_data.items())
-        ]
+        return [User(**user) for user in _data.values()]
 
-    def get(self, username: str | None) -> User | None:
+    def get(self, user_id: str) -> User | None:
         """Get user data"""
-        if username in _data:
-            user = _data.get(username)
-            return User(**user, username=username)
+        if user_id in _data:
+            return User(**_data.get(user_id))
         return None
 
-    def create(self, username: str, password: str) -> User:
+    def create(self, username: str, password: str, email: str = None) -> User:
         """Add new user to database"""
-        _data[username] = {"password": password}
-        return User(username=username, password=password)
+        user_id = str(len(_data) + 1)
+        _data[user_id] = {
+            "id": user_id,
+            "username": username,
+            "email": email,
+            "password": password,
+        }
+        return User(**_data.get(user_id))
 
 
 UsersDependency = Annotated[Users, Depends()]

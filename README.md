@@ -23,3 +23,9 @@ The services will be exposed as follows:
 
 - frontend: http://localhost:5173
 - backend: http://localhost:8000
+
+## Testing and linting
+
+Run backend tests with the command `pytest`.
+
+Backend is configured to use pylint. Run linter with the command `pylint backend`

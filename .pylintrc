@@ -1,0 +1,7 @@
+[BASIC]
+no-docstring-rgx=^_|^test_
+
+[MESSAGES CONTROL]
+disable=
+    C0114,  # missing-module-docstring
+    C0115   # missing-class-docstring
