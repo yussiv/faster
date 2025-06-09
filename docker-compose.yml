@@ -12,4 +12,4 @@ services:
       - 8000:8000
     volumes:
       - ./backend/src:/app/src
-      - ./backend/test:/app/test
+      - ./backend/tests:/app/tests
