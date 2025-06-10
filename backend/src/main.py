@@ -2,11 +2,11 @@
 
 from fastapi import FastAPI, APIRouter
 
-from .api import hello, user_controller
+from .api import root_controller, user_controller
 
 app = FastAPI()
-router = APIRouter(prefix="/api")
+api_router = APIRouter(prefix="/api")
 
-router.include_router(hello.router)
-router.include_router(user_controller.router)
-app.include_router(router)
+api_router.include_router(user_controller.router)
+app.include_router(root_controller.router)
+app.include_router(api_router)

@@ -4,7 +4,7 @@ from fastapi.routing import APIRouter
 
 from ..logger import logger
 
-router = APIRouter(prefix="/hello")
+router = APIRouter()
 
 
 @router.get("/")
