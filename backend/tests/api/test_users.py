@@ -1,9 +1,12 @@
 from fastapi.testclient import TestClient
 
 from src.main import app
-from src.models import User
+from src.services.models import User
+from src.api.schemas import UserResponse
 
 client = TestClient(app)
+
+# TODO: error cases
 
 
 def _create_user(user_data: dict) -> User:
@@ -21,10 +24,7 @@ def _create_user(user_data: dict) -> User:
     assert found_user is not None
     assert found_user.get("id") == user_id
 
-    return User(
-        **found_user,
-        password="secret",  # FIXME: separate model for API response with optional password
-    )
+    return UserResponse(**found_user)
 
 
 def test_get_users():

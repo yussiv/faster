@@ -3,7 +3,7 @@
 from typing import Annotated
 from fastapi import Depends
 
-from ..models import User
+from ..services.models import User
 
 _data = {
     "1": {
@@ -21,7 +21,7 @@ _data = {
 }
 
 
-class Users:
+class UserRepository:
     def get_all(self) -> list[User]:
         """Get list of User models"""
         return [User(**user) for user in _data.values()]
@@ -56,4 +56,4 @@ class Users:
             del _data[user_id]
 
 
-UsersDependency = Annotated[Users, Depends()]
+UserRepoDependency = Annotated[UserRepository, Depends()]

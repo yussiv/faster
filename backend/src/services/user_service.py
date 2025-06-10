@@ -3,12 +3,12 @@
 from typing import Annotated
 from fastapi import Depends
 
-from ..db.users import UsersDependency
-from ..models import User
+from ..db.user_repository import UserRepoDependency
+from .models import User
 
 
 class UserService:
-    def __init__(self, db: UsersDependency):
+    def __init__(self, db: UserRepoDependency):
         self.db = db
 
     def get_user(self, user_id: str) -> User | None:
@@ -19,11 +19,9 @@ class UserService:
         """Get all users"""
         return self.db.get_all()
 
-    def create_user(self, user: User) -> User:
+    def create_user(self, username: str, password: str, email: str) -> User:
         """Create new user"""
-        return self.db.create(
-            username=user.username, password=user.password, email=user.email
-        )
+        return self.db.create(username=username, password=password, email=email)
 
     def update_user_email(self, user_id: str, email: str) -> User | None:
         """Update user fields, apart from id, username and password"""
